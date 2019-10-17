@@ -1,8 +1,12 @@
 import json
 
+from TigrCommand import TigrCommand
+from TurtleDrawer import TurtleDrawer
+
+
 class CommandFactory(object):
-    def __init__(self, drawer, lookup_file_name="command_lookup.json"):
-        self.__drawer = drawer
+    def __init__(self, lookup_file_name="command_lookup.json"):
+        self.__drawer = TurtleDrawer()
         self.__command_pool = {}
         self.__command_lookup = self.__load_command_lookup(lookup_file_name)
 
@@ -24,4 +28,16 @@ class CommandFactory(object):
         return command
 
     def __create_command(self, command_text):
-        pass
+        command_info = self.__command_lookup.get(command_text)
+        if not command_info:
+            raise ValueError(f"Command {command_text} not valid")
+
+        drawer_function = command_info[0]
+        args = command_info[1] if len(command_info) > 1 else []
+
+        try:
+            function = getattr(self.__drawer, drawer_function)
+        except AttributeError:
+            raise ValueError(f'Command {drawer_function} not recognised by drawer')
+        else:
+            return TigrCommand(function, args)

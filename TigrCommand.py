@@ -1,10 +1,10 @@
 class TigrCommand:
     def __init__(self, drawer_command, args):
-        self.drawer_command = drawer_command
-        self.args = args
+        self.__drawer_command = drawer_command
+        self.__args = args
 
-    def execute(self, drawer):
-        try:
-            return drawer.__getattribute__(self.drawer_command)(*self.args)
-        except AttributeError:
-            raise SyntaxError(f'Command {self.drawer_command} not recognised by drawer')
+    def execute(self, data=None):
+        if data:
+            self.__args.append(data)
+
+        return self.__drawer_command(self.__args)
