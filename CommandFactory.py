@@ -1,12 +1,11 @@
 import json
 
 from TigrCommand import TigrCommand
-from TurtleDrawer import TurtleDrawer
 
 
 class CommandFactory(object):
-    def __init__(self, lookup_file_name="command_lookup.json"):
-        self.__drawer = TurtleDrawer()
+    def __init__(self, drawer, lookup_file_name="command_lookup.json"):
+        self.__drawer = drawer
         self.__command_pool = {}
         self.__command_lookup = self.__load_command_lookup(lookup_file_name)
 
