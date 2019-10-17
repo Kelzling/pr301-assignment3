@@ -4,7 +4,8 @@ class TigrCommand:
         self.__args = args
 
     def execute(self, data=None):
+        args = self.__args.copy()
         if data:
-            self.__args.append(data)
+            args.append(data)
 
-        return self.__drawer_command(self.__args)
+        return self.__drawer_command(*args)
