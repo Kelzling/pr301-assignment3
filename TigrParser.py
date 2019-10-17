@@ -1,5 +1,4 @@
 from TIGr import AbstractParser
-from CommandBuilder import CommandBuilder
 import re
 
 """
