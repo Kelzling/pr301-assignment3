@@ -10,15 +10,12 @@ Refactored by Kelsey Vavasour
 
 
 class TigrParser(AbstractParser):
-    def __init__(self, drawer, exception_handler):
-        super().__init__(drawer)
+    def __init__(self, command_factory, exception_handler):
+        super().__init__()
         self.regex_pattern = r'(^[a-zA-Z]\b)\s+?(-?\b\d+\.?\d?\b)?\s*?([#|//].*)?$'
         self.__output_log = []
         self.exception_handler = exception_handler
-        try:
-            self.command_builder = CommandBuilder()
-        except Exception as e:
-            self.exception_handler.display_and_exit(e)
+        self.__command_factory = command_factory
 
     @property
     def output_log(self):
@@ -37,9 +34,9 @@ class TigrParser(AbstractParser):
             try:
                 command, data = self.__parse_line(current_line)
 
-                prepared_command = self.command_builder.prepare_command(command, data)
+                prepared_command = self.__command_factory.get_command(command)
 
-                output = prepared_command.execute(self.drawer)
+                output = prepared_command.execute(data)
                 self._log_drawer_output(output)
             except Exception as e:
                 self.exception_handler.display_and_exit(e, line_number=line_number, line=current_line)

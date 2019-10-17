@@ -1,5 +1,5 @@
 from TIGr import AbstractSourceReader
-from TurtleDrawer import TurtleDrawer
+from CommandFactory import CommandFactory
 from TigrParser import TigrParser
 from TigrExceptionHandler import TigrExceptionHandler
 import sys
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     if args.file:
         # file name provided - read input from file
-        TigrReader(TigrParser(TurtleDrawer(), the_exception_handler), the_exception_handler,
+        TigrReader(TigrParser(CommandFactory(), the_exception_handler), the_exception_handler,
                    optional_file_name=args.file).go()
     else:
         # read from stdin
@@ -62,7 +62,7 @@ if __name__ == "__main__":
             # read from piped input
             source = sys.stdin.readlines()
 
-        reader = TigrReader(TigrParser(TurtleDrawer(), the_exception_handler), the_exception_handler,
+        reader = TigrReader(TigrParser(CommandFactory(), the_exception_handler), the_exception_handler,
                             optional_source=source)
         reader.go()
         print(*reader.parser.output_log)

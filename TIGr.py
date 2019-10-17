@@ -34,9 +34,6 @@ class AbstractDrawer(ABC):
 
 
 class AbstractParser(ABC):
-    def __init__(self, drawer):
-        self.drawer = drawer
-
     @abstractmethod
     def parse(self, raw_source):
         pass
