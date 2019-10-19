@@ -3,6 +3,7 @@ from CommandFactory import CommandFactory
 from TigrParser import TigrParser
 from TurtleDrawer import TurtleDrawer
 from TigrExceptionHandler import TigrExceptionHandler
+from RegexLineParser import RegexLineParser
 import sys
 
 
@@ -47,7 +48,7 @@ if __name__ == "__main__":
 
     if args.file:
         # file name provided - read input from file
-        TigrReader(TigrParser(CommandFactory(TurtleDrawer()), the_exception_handler), the_exception_handler,
+        TigrReader(TigrParser(CommandFactory(TurtleDrawer()), RegexLineParser(), the_exception_handler), the_exception_handler,
                    optional_file_name=args.file).go()
     else:
         # read from stdin
@@ -63,7 +64,7 @@ if __name__ == "__main__":
             # read from piped input
             source = sys.stdin.readlines()
 
-        reader = TigrReader(TigrParser(CommandFactory(TurtleDrawer()), the_exception_handler), the_exception_handler,
+        reader = TigrReader(TigrParser(CommandFactory(TurtleDrawer()), RegexLineParser(), the_exception_handler), the_exception_handler,
                             optional_source=source)
         reader.go()
         print(*reader.parser.output_log)
