@@ -1,5 +1,4 @@
 from TIGr import AbstractParser
-from RegexLineParser import RegexLineParser
 
 """
 Uses Regular Expressions in Parser, Parsed from Configurable Lookup Table
