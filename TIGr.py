@@ -34,9 +34,46 @@ class AbstractDrawer(ABC):
 
 
 class AbstractParser(ABC):
-    @abstractmethod
+    def __init__(self, command_factory, exception_handler):
+        self.__output_log = []
+        self.__exception_handler = exception_handler
+        self.__command_factory = command_factory
+
+    @property
+    def output_log(self):
+        # readonly
+        return self.__output_log
+
     def parse(self, raw_source):
+        if type(raw_source) == str:  # defensively handles edge case where a single command was passed as a string
+            raw_source = [raw_source]
+
+        for line_number in range(0, len(raw_source) - 1):
+            current_line = raw_source[line_number]
+
+            if self._skip_line(current_line):
+                continue
+
+            try:
+                command, data = self._parse_line(current_line)
+
+                prepared_command = self.__command_factory.get_command(command)
+
+                output = prepared_command.execute(data)
+                self._log_drawer_output(output)
+            except Exception as e:
+                self.__exception_handler.display_and_exit(e, line_number=line_number, line=current_line)
+
+    @abstractmethod
+    def _skip_line(self, line) -> bool:
         pass
+
+    @abstractmethod
+    def _parse_line(self, line) -> (str, int):
+        pass
+
+    def _log_drawer_output(self, output):
+        self.__output_log.append(output)
 
 
 class AbstractSourceReader(ABC):
